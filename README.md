@@ -13,8 +13,8 @@ os, BeautifulSoup, requests, datetime, prettytable, csv, time
 
 
 TO-DO list.
-sortowanie danych według ceny lub województwa
-kalkulator ceny po podniu ile litrów chcemy zatankować
-tworzenie nowych plików z cenami lub dopisywanie aktualnych cen do starych plików z cenami według daty
-obliczenie zmian cen i tworzenie wykresów
-obsługa GUI
+- sortowanie danych według ceny lub województwa
+- kalkulator ceny po podniu ile litrów chcemy zatankować
+- tworzenie nowych plików z cenami lub dopisywanie aktualnych cen do starych plików z cenami według daty
+- obliczenie zmian cen i tworzenie wykresów
+- napisanie GUI
