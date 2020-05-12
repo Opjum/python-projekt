@@ -1,4 +1,4 @@
-# python-projekt
+# python-srednie-ceny-paliw
 Pierwszy mój program w pythonie pisany w celach edukacyjnych, wiem kod wygląda koszmarnie,
 
 
