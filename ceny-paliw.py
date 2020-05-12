@@ -70,7 +70,26 @@ def zapis_csv(data, headers):
         writer.writerows(data)
 
 
-print(roznica_dat)
-#zapis_html()
-zapis_csv(data, headers)
-#print(pod_csv)
+#uzytkownik wybiera czy chce plik html czy csv
+
+while True:
+   
+    user_choice = input("""Wybierz numer :
+                        1. Stworz plik html
+                        2. Stworz plik csv
+                        3. wyjdz \n""")
+    
+    if user_choice not in ['1', '2', '3']:
+        print('wprowadziles zly numer, wybierz 1-3')
+        continue
+    elif (user_choice) == "1":
+        zapis_html()
+        break
+    elif user_choice == "2":
+        zapis_csv(data, headers)
+        break
+    elif user_choice == "3":
+        break
+    
+        
+     
