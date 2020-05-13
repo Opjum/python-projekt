@@ -7,6 +7,7 @@ Funkcje programu:
 2. Zapisuje je albo do pliku html lub pliku csv wedle wyboru użytkownika
 3. Pobiera date ostatniej aktualizacji cen i pokazuje w pliku html ile dni mineło od ostatniej aktualizacji
 4. Pokazuje date ostatniej modyfikacji pliku html
+5. kalkulator ceny po podaniu ile litrów chcemy zatankować (*trzeba dodac exceptions gdy user wprowadzi zły typ zmiennej w input)
 
 Wykorzystane biblioteki:
 os, BeautifulSoup, requests, datetime, prettytable, csv, time
@@ -14,7 +15,7 @@ os, BeautifulSoup, requests, datetime, prettytable, csv, time
 
 TO-DO list.
 - sortowanie danych według ceny lub województwa
-- kalkulator ceny po podniu ile litrów chcemy zatankować
+- 
 - tworzenie nowych plików z cenami lub dopisywanie aktualnych cen do starych plików z cenami według daty
 - obliczenie zmian cen i tworzenie wykresów
 - napisanie GUI
