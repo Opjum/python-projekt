@@ -70,6 +70,25 @@ def zapis_csv(data, headers):
         writer.writerows(data)
 
 
+def kalkulator_tankowania():
+    ilosc = input('Podaj ile litrow chcesz zatankowac: \t')
+    paliwo = input('''
+                    1 ON
+                    2 E95
+                    3 S98
+                    4 LPG \n
+                    Podaj numer paliwa:  ''')
+    region = input('PODAJ REGION : \t')
+
+    for listki in data:
+        for element in listki:
+            if element == region.capitalize():
+        
+                cena = listki[int(paliwo)]
+                cenakropka = cena[0] + "." + cena[2:]
+                cenafloat = float(cenakropka[:4])
+
+    print(float(ilosc) * cenafloat) 
 #uzytkownik wybiera czy chce plik html czy csv
 
 while True:
@@ -77,9 +96,10 @@ while True:
     user_choice = input("""Wybierz numer :
                         1. Stworz plik html
                         2. Stworz plik csv
-                        3. wyjdz \n""")
+                        3. oblicz cene paliwa
+                        4. wyjdz \n""")
     
-    if user_choice not in ['1', '2', '3']:
+    if user_choice not in ['1', '2', '3', '4']:
         print('wprowadziles zly numer, wybierz 1-3')
         continue
     elif (user_choice) == "1":
@@ -89,7 +109,9 @@ while True:
         zapis_csv(data, headers)
         break
     elif user_choice == "3":
+        kalkulator_tankowania()
         break
-    
+    elif user_choice == "4":
+        break
         
      
