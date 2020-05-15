@@ -6,6 +6,7 @@ from prettytable import PrettyTable  # do stworzenia tabelki html
 import csv
 import os
 import time
+import operator #do sortowania
 
 # kod startujacy moduł bs4
 page = requests.get('https://www.wnp.pl/nafta/ceny_paliw/')
@@ -39,21 +40,53 @@ for th in header:
 # parsowanie tablki z cenami
 for rows in rows:
     cols = rows.find_all('td')
-    cols = [ele.text.strip() for ele in cols]
     # dodaje do listy jesli element nie jest pusty
+    cols = [ele.text.strip() for ele in cols]
     data.append([ele.replace(u'\xa0\xa0', u' ') for ele in cols if ele])
 
-pod_csv = [headers, data] 
+# zmiana cen na typ float
+topdata = []
+for listki in data:
+    nowadata = []
+    for element in listki:
+        
+        if element != listki[0]:
 
-#nazwy wojedzództw w jednej liscie
+            cena = element
+            cenakropka = cena[0] + "." + cena[2:]
+            cenafloat = float(cenakropka[:4])
+            
+            
+            
+            nowadata.append(cenafloat)
+        
+        else:
+            nowadata.append(element)
+    topdata.append(nowadata)
+
+
+#lista z wojewodztwami
 wojewodztwa = []
 for i in data[1:]:
     wojewodztwa.append(i[0])
 
 
-# zapisywanie do pliku html
-def zapis_html():
 
+# zapisywanie do pliku html
+def dodawniezl(topdata):
+    dataE = []
+    for listki in topdata[1:]:
+        datab =[]
+        for element in listki:
+            if element != listki[0]:
+                datab.append("{:.2f}".format(element) + " zl")
+            else:
+                datab.append(element)
+        dataE.append(datab)
+    return dataE
+
+def zapis_html(data):
+   
     x = PrettyTable(headers)
     x.format = True
     for i in data[1:]:
@@ -70,25 +103,26 @@ def zapis_html():
 
 
 # zapis do csv
+
 def zapis_csv(data, headers):
     with open('output.csv', 'w', encoding='utf-8') as f:
         writer = csv.writer(f)
         data.insert(1, headers)
         writer.writerows(data)
 
-# kalkulator paliw, podaj ilośc litrów, województwo i cene a program obliczy ile musisz zapłacić
-def kalkulator_tankowania():
-    while True:  # sprawdza czy user wprowadził dobry typ zmiennej
+
+def kalkulator_tankowania(data):
+    while True:
         try:
             ilosc = float(input('Podaj ile litrow chcesz zatankowac: \t'))
-            while True: # sprawdza czy user wprowadził numer z zakresu 1-4
+            while True:
                 paliwo = int(input('''
                             1 ON
                             2 E95
                             3 S98
                             4 LPG \n
                             Podaj numer paliwa:  '''))
-                if paliwo not in range(1, 4):
+                if paliwo not in range(1, 5):
                     print(" musisz podać liczbe miedzy 1 a 4")
                     continue
                 else:
@@ -99,45 +133,85 @@ def kalkulator_tankowania():
             continue
         else:
             break
-    while True: #sprawdza czy user wprowadził nazwe regionu znajdującego sie w liście dostepnych regionów
+    while True:
         region = input('Wprowadz poprawną nazwe regionu z zakresu:  ' + " ".join(wojewodztwa) + '\t')
         if region.capitalize() in wojewodztwa:
             break
         else:
             print('podałes nieprawidłowy region  ' + " ".join(wojewodztwa))
             continue
-    #pobiera cene paliwa z listy i zmienia ją w typ float usuwając niepotrzebne znaki
+
     for listki in data:
         for element in listki:
             if element == region.capitalize():
 
                 cena = listki[paliwo]
-                cenakropka = cena[0] + "." + cena[2:]
-                cenafloat = float(cenakropka[:4])
+    x = PrettyTable()
+    x.field_names = ['województwo', 'rodzaj paliwa','ilość litrów', 'cena za litr', 'do zapłaty']
+    x.add_row([region, headers[paliwo], ilosc, cena, ilosc*cena])
+    print(x)
+    
+# uzytkownik wybiera czy chce plik html czy csv
 
-    print(ilosc * cenafloat)
+
+
+    
+
+
+    
+def posortowane():
+    while True:
+        try:
+            paliwo = int(input('''
+                                1 ON
+                                2 E95
+                                3 S98
+                                4 LPG \n
+                                Podaj numer paliwa:  '''))
+            if paliwo not in range(1, 5):
+                print("musisz podać liczbe miedzy 1 a 4")
+                continue
+            
+        except ValueError:
+            print(' musisz podać liczbe pomiedzy 1 a 4') 
+        else:
+            break
+    del topdata[0]
+    topdata_posortowane = sorted(dodawniezl(topdata), key = operator.itemgetter(paliwo), reverse=True)
+
+    x = PrettyTable()
+    x.field_names = headers
+    for i in topdata_posortowane:
+        x.add_row(i)
+    print(x)
     
     
-# MENU GŁÓWNE
+
+
+
 while True:
 
     user_choice = input("""Wybierz numer :
-                        1. Stworz plik html
-                        2. Stworz plik csv
-                        3. oblicz cene paliwa
-                        4. wyjdz \n""")
+                        1. Kalkulator ceny paliwa
+                        2. Sortowanie według ceny
+                        3. Stworz plik csv
+                        4. Stworz plik html
+                        5. wyjdz \n""")
 
-    if user_choice not in ['1', '2', '3', '4']:
-        print('wprowadziles zly numer, wybierz 1-3')
+    if user_choice not in ['1', '2', '3', '4', '5']:
+        print('wprowadziles zly numer, wybierz 1-5')
         continue
-    elif (user_choice) == "1":
-        zapis_html()
+    elif user_choice == "1":
+        kalkulator_tankowania(topdata)
         break
     elif user_choice == "2":
-        zapis_csv(data, headers)
+        posortowane()
         break
     elif user_choice == "3":
-        kalkulator_tankowania()
+        zapis_csv(dodawniezl(topdata), headers)
         break
     elif user_choice == "4":
+        zapis_html(dodawniezl(topdata))
+        break
+    elif user_choice == "5":
         break
