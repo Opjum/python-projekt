@@ -19,3 +19,6 @@ TO-DO list.
 - tworzenie nowych plików z cenami lub dopisywanie aktualnych cen do starych plików z cenami według daty
 - obliczenie zmian cen i tworzenie wykresów
 - napisanie GUI
+
+#SCREENSHOTY
+![Test Image 1](https://i.imgur.com/vny53vk.png)
